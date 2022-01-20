@@ -1,0 +1,23 @@
+{
+  "name": "arduinoserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RokastXD/arduinoServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RokastXD/arduinoServer/issues"
+  },
+  "homepage": "https://github.com/RokastXD/arduinoServer#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
