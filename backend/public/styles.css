@@ -1,0 +1,24 @@
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #F4F5FF;
+    
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#humstr, #temstr {
+    color: blue;
+    font-size: 300%;
+    text-align: center;
+    float: left;
+}
+
+#temstr {
+    color: red;
+}
