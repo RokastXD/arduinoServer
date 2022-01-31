@@ -1,9 +1,15 @@
-const express = require('express')
+import { Telegraf, Telegram } from "telegraf";
+import express from "express";
 const app = express()
 const port = 3000
+const token = "5204200238:AAGCRi5Holx3pszEruYDxVdNCMj2iM0gyvw"
+const bot = new Telegraf(token)
+const telegram = new Telegram(token)
 
 let hum
 let tem
+let mq7
+let chatId
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -13,17 +19,32 @@ app.post('/', (req, res) => {
         res.sendStatus(200)
         hum = req.body.hum
         tem = req.body.tem
+        mq7 = req.body.mq7
+        console.log(mq7);
+
+        if (chatId && mq7 > 150) {
+            console.log(chatId);
+            telegram.sendMessage(chatId, 'alert')
+        }
     } else {
         res.sendStatus(401)
     }
 })
 
-//`Hum - ${hum} | Temperature - ${tem}`
-
-app.get('/sensors/', function (req, res) {
+app.get('/sensors/', (req, res) => {
     res.send( {hum, tem} )
 })
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)
 })
+
+// Telegram bot
+bot.start((ctx) => ctx.reply('Welcome, write /status for information'))
+bot.command('status', (ctx) => ctx.reply(`Condition of this room - Humidity: ${hum}, Temperature: ${tem}`))
+bot.on('text', (ctx) => {
+    chatId = ctx.message.chat.id
+    ctx.telegram.sendMessage(ctx.message.chat.id, 'Fire safety threat!')
+})
+
+bot.launch()
