@@ -6,10 +6,10 @@ const token = "5204200238:AAGCRi5Holx3pszEruYDxVdNCMj2iM0gyvw"
 const bot = new Telegraf(token)
 const telegram = new Telegram(token)
 
-let hum
-let tem
-let mq7
+let hum; let tem; let mq7; let currentPeople
 let chatId
+let flag = true
+let interval
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -20,19 +20,26 @@ app.post('/', (req, res) => {
         hum = req.body.hum
         tem = req.body.tem
         mq7 = req.body.mq7
-        console.log(mq7);
-
-        if (chatId && mq7 > 150) {
-            console.log(chatId);
-            telegram.sendMessage(chatId, 'alert')
+        currentPeople = req.body.persons        
+        console.log(mq7, flag);
+        if (chatId && mq7 > 800 && flag) {
+            telegram.sendMessage(chatId, 'Fire safety threat!')
+            flag = false
+        }
+        if (mq7 > 800 && !interval) {
+            interval = setInterval(() => { flag = true }, 50000)
+        }
+        if (mq7 < 800 && interval) {
+            clearInterval(interval)
         }
     } else {
         res.sendStatus(401)
     }
 })
 
+
 app.get('/sensors/', (req, res) => {
-    res.send( {hum, tem} )
+    res.send( {hum, tem, currentPeople, mq7} )
 })
 
 app.listen(port, () => {
@@ -40,11 +47,12 @@ app.listen(port, () => {
 })
 
 // Telegram bot
-bot.start((ctx) => ctx.reply('Welcome, write /status for information'))
-bot.command('status', (ctx) => ctx.reply(`Condition of this room - Humidity: ${hum}, Temperature: ${tem}`))
+bot.start((ctx) => ctx.reply('Welcome, write /status or /gas for information'))
+bot.command('status', (ctx) => ctx.reply(`Condition of this room - Humidity: ${hum}, Temperature: ${tem} \n Peoples in room: ${currentPeople}`))
+bot.command('gas', (ctx) => ctx.reply(`CO2 is in the room: ${mq7}`))
 bot.on('text', (ctx) => {
     chatId = ctx.message.chat.id
-    ctx.telegram.sendMessage(ctx.message.chat.id, 'Fire safety threat!')
+    ctx.telegram.sendMessage(ctx.message.chat.id, 'Yes?')
 })
 
 bot.launch()

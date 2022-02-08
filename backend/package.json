@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/RokastXD/arduinoServer#readme",
   "dependencies": {
+    "chart.js": "^3.7.0",
     "express": "^4.17.2",
     "telegraf": "^4.6.0"
   }
