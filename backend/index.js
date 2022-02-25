@@ -1,8 +1,9 @@
 import { Telegraf, Telegram } from "telegraf";
 import express from "express";
+import keys from "./keys.json" assert { type: "json" };
 const app = express()
 const port = 3000
-const token = "5204200238:AAGCRi5Holx3pszEruYDxVdNCMj2iM0gyvw"
+const token = `${keys.botToken}`
 const bot = new Telegraf(token)
 const telegram = new Telegram(token)
 
@@ -15,7 +16,7 @@ app.use(express.json())
 app.use(express.static('public'))
 
 app.post('/', (req, res) => {
-    if (req.body.parol == 'dferv5tgh6yjju7mik,80p;-[=-0o9i8u7y6t56y7yui89iol0p;-0.[0oedrftgyjhuol98iu76yert54ftghyjuikoi9u8u7jrf4e5ttty67uuuik8uj7yrh6tg5r54ery67ujjjolkedwsfrgtttyjhujiop') {
+    if (req.body.parol == `${keys.arduinoPassword}`) {
         res.sendStatus(200)
         hum = req.body.hum
         tem = req.body.tem
@@ -52,7 +53,7 @@ bot.command('status', (ctx) => ctx.reply(`Condition of this room - Humidity: ${h
 bot.command('gas', (ctx) => ctx.reply(`CO2 is in the room: ${mq7}`))
 bot.on('text', (ctx) => {
     chatId = ctx.message.chat.id
-    ctx.telegram.sendMessage(ctx.message.chat.id, 'Yes?')
+    ctx.telegram.sendMessage(ctx.message.chat.id, 'Yes? Write /start for commands')
 })
 
 bot.launch()
