@@ -2,7 +2,7 @@ import { Telegraf, Telegram } from "telegraf";
 import express from "express";
 const app = express()
 const port = 3000
-const token = "5204200238:AAGCRi5Holx3pszEruYDxVdNCMj2iM0gyvw"
+const token = "botToken"
 const bot = new Telegraf(token)
 const telegram = new Telegram(token)
 
